@@ -1,0 +1,51 @@
+ko-words.tsv holds word counts only (no sentences), built by tools/build_ko_words.py from these
+sources (permissive licences only; share-alike sources are left out):
+
+ko-jamo-4gram.bin (typo suggestions) is derived from ko-words.tsv alone (tools/build_jamo_lm.py), under the
+same sources and terms.
+
+Running text and word counts
+- Leipzig Corpora Collection, Korean news. CC BY. D. Goldhahn, T. Eckart and U. Quasthoff,
+  "Building Large Monolingual Dictionaries at the Leipzig Corpora Collection", LREC 2012.
+  https://wortschatz.uni-leipzig.de
+- korean-petitions (huggingface.co/datasets/heegyu/korean-petitions, from
+  github.com/lovit/petitions_archive). MIT License.
+- Korean raw corpus, Zenodo record 4317288. CC BY 4.0.
+- koreascience-summarization (huggingface.co/datasets/nglaura/koreascience-summarization). Apache-2.0.
+- BC Card finance QnA. Apache-2.0.
+- Kiwi (github.com/bab2min/Kiwi): its model's word counts. Apache-2.0.
+- korean-sarcasm. MIT License. question-pair (github.com/songys/Question_pair). MIT License.
+- Chatbot_data (github.com/songys/Chatbot_data). MIT License.
+- NSMC: Naver sentiment movie corpus v1.0, by Lucy Park. https://github.com/e9t/nsmc. CC0 1.0.
+- korean_safe_conversation (huggingface.co/datasets/jojo0217/korean_safe_conversation). Apache-2.0.
+- Common Voice Korean sentences (Mozilla). CC0 1.0.
+- KommonGen. MIT License. FunctionChat-Bench. Apache-2.0. HiKE code-switching. Apache-2.0.
+- Amazon MASSIVE (Korean). CC BY 4.0.
+- Korean documentation: Kubernetes, React and Vue docs (CC BY 4.0); TypeScript handbook and
+  Node.js site (MIT); The Rust Programming Language (MIT OR Apache-2.0).
+- 금융위원회 금융용어사전 (data.go.kr 15160317). 이용허락범위 제한 없음.
+- Unicode CLDR (Korean). Unicode License v3.
+- FineWeb-2, Korean web text (huggingface.co/datasets/HuggingFaceFW/fineweb-2, data/kor_Hang),
+  part of one shard, counted by tools/fetch_fineweb.py. ODC-By 1.0.
+
+Dictionary headwords (known words, counted at least 3)
+- mecab-ko-dic. Apache-2.0. open-korean-text. Apache-2.0.
+
+en-words.txt is JIS Moonshot's common-en.txt (team-mirae/jis-moonshot, MIT); its generated part is
+derived from Tatoeba (https://tatoeba.org, CC BY 2.0 FR) English sentences, counts only.
+
+ja-words.txt is JIS Moonshot's common-ja.txt (team-mirae/jis-moonshot, MIT): hand-written everyday
+Japanese words in kana.
+
+hanja.tsv is JIS Korean's hanja dictionary (team-mirae/jis-korean): see LICENSE-libhangul-hanja.txt
+and LICENSE-unicode.txt.
+
+kanji.bin is built from Mozc's open-source dictionary: see LICENSE-mozc.txt.
+
+ja-kana-native.txt (Japanese words usually written in kana; built into the engine) holds counts only,
+from Tatoeba (https://tatoeba.org, CC BY 2.0 FR) Japanese sentences, read with SudachiPy and
+SudachiDict core (Apache-2.0), by tools/build_kana_native.py. So does ja-common-words.txt (the most
+common Japanese words not written in kana; built into the engine): words and readings with counts.
+
+en-words.txt's `#! rare` section is Webster's Second New International Dictionary (1934), in the
+public domain, as macOS ships it in /usr/share/dict/words (engine/tools/build_en_rare.py).

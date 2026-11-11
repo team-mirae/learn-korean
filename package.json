@@ -1,0 +1,14 @@
+{
+  "name": "learn-korean",
+  "private": true,
+  "type": "module",
+  "description": "Learn to type Korean with bada ime: bada roman, its shortcuts, then 2-set. learn.sjun.me",
+  "scripts": {
+    "sync": "node tools/sync-engine.mjs",
+    "test": "node test/learn.mjs && node test/mcp.mjs",
+    "start": "python3 -m http.server 8000 -d public"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

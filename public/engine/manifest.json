@@ -1,0 +1,38 @@
+{
+ "version": "0.1.6",
+ "commit": "fc97949",
+ "wasm": {
+  "path": "bada.29937af00205.wasm",
+  "size": 603094
+ },
+ "data": {
+  "ko-words.tsv": {
+   "path": "data/ko-words.tsv.9c29d29eb9db.gz",
+   "size": 7142901
+  },
+  "en-words.txt": {
+   "path": "data/en-words.txt.2e16eeda78fe.gz",
+   "size": 717785
+  },
+  "oecd.tsv": {
+   "path": "data/oecd.tsv.4e0a4a434a39.gz",
+   "size": 747
+  },
+  "ja-words.txt": {
+   "path": "data/ja-words.txt.d67f003c1379.gz",
+   "size": 3106
+  },
+  "ko-jamo-4gram.bin": {
+   "path": "data/ko-jamo-4gram.bin.d8c54bb03b00.gz",
+   "size": 782981
+  },
+  "symbols.tsv": {
+   "path": "data/symbols.tsv.db1aefaf1d5a.gz",
+   "size": 2176
+  },
+  "en-ko.tsv": {
+   "path": "data/en-ko.tsv.2bc749915bdc.gz",
+   "size": 740584
+  }
+ }
+}
