@@ -8,9 +8,12 @@ it gives. The learner first picks the Korean layout to aim for, and learns it fr
 
 | Track | Layout | Keyboards | Lessons |
 |---|---|---|---|
-| `bada-roman` | bada roman (15): Korean spelled in Latin letters | US (ANSI), ISO, JIS | R1 the letters, R2 the shortcuts |
 | `2set` | Korean 2-set (10, KTS): the standard keyboard | US (ANSI), ISO, JIS | K1 home, top and bottom rows, Shift, compound jamo |
+| `bada-roman` | bada roman (15): Korean spelled in Latin letters | US (ANSI), ISO, JIS | R1 the letters, R2 the shortcuts |
 | `bada` | bada (13): bada ime's own JIS layout | JIS | B1 home row, vowels, consonants, finals, number row |
+
+bada and bada roman work best on a JIS (Japanese) keyboard, and typing them outside the lessons
+needs bada ime, which is macOS only for now; the onboarding says so.
 
 Each lesson ends in a drill: a word, its standard romanization (Revised Romanization) and its keys
 above it; Space commits it and it's checked. Each track ends with the national anthem (애국가, verse 1

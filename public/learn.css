@@ -73,6 +73,7 @@ code{font-family:ui-monospace,Menlo,monospace;font-size:.92em;background:color-m
 .track{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 14px;border-radius:10px}
 .track b{font-size:1rem}
 .track span{color:var(--muted);font-size:.88rem}
+.track .caveat{color:var(--f);font-size:.82rem}
 .track:hover,.track.current{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
 .drill .key.mod .cap{fill:var(--mod)}
 .drill .key:not(.live){cursor:default}

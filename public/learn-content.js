@@ -419,14 +419,18 @@ export function lessonItems(lesson) {
 /** Every lesson, flat, with its level. */
 export const LESSONS = LEVELS.flatMap(level => level.lessons.map(lesson => ({ ...lesson, level })));
 
-/** The tracks: the layout a learner aims for, and its levels. */
+const BADA_CAVEAT = "Works best on a JIS (Japanese) keyboard. To type it outside these lessons you need bada ime, which is macOS only for now.";
+
+/** The tracks: the layout a learner aims for, and its levels. 2-set first: it's the one everywhere. */
 export const TRACKS = [
-  { id: "bada-roman", name: "bada roman", layout: 15, boards: ["ansi", "iso", "jis"],
-    blurb: "Korean spelled in Latin letters: type 한 as han. The quickest start, on any keyboard." },
   { id: "2set", name: "Korean 2-set (KTS)", layout: 10, boards: ["ansi", "iso", "jis"],
-    blurb: "The standard Korean keyboard (두벌식): one key per jamo. What most Koreans type." },
+    blurb: "The standard Korean keyboard (두벌식): one key per jamo. What most Koreans type, and built into every computer and phone." },
+  { id: "bada-roman", name: "bada roman", layout: 15, boards: ["ansi", "iso", "jis"],
+    blurb: "Korean spelled in Latin letters: type 한 as han. The quickest start.",
+    caveat: BADA_CAVEAT },
   { id: "bada", name: "bada", layout: 13, boards: ["jis"],
-    blurb: "bada ime's own layout for JIS keyboards: every jamo on a key, no guessing." },
+    blurb: "bada ime's own layout: every jamo on a key, no guessing.",
+    caveat: BADA_CAVEAT },
 ].map(t => ({ ...t, levels: LEVELS.filter(l => l.track === t.id) }));
 
 export const trackOf = id => TRACKS.find(t => t.id === id) || TRACKS[0];

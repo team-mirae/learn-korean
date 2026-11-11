@@ -375,7 +375,8 @@ $("tracks").replaceChildren(...TRACKS.map(t => {
   const b = document.createElement("button");
   b.className = "track" + (t.id === track.id && progress.onboarded ? " current" : "");
   b.value = t.id;
-  b.innerHTML = `<b>${esc(t.name)}</b><span>${esc(t.blurb)}</span>`;
+  b.innerHTML = `<b>${esc(t.name)}</b><span>${esc(t.blurb)}</span>` +
+    (t.caveat ? `<span class="caveat">${esc(t.caveat)}</span>` : "");
   return b;
 }));
 onboarding.addEventListener("close", () => {
