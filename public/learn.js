@@ -228,8 +228,7 @@ function finish() {
   if (best == null || acc > best) progress.best[lesson.id] = acc;
   save();
   drawLessons();
-  const own = LESSONS.filter(l => l.level.track === track.id);
-  const next = own[own.findIndex(l => l.id === lesson.id) + 1];
+  const next = nextLesson();
   const box = $("result");
   box.hidden = false;
   box.innerHTML = `<b>${acc >= PASS ? "Well done!" : "Done."}</b> ${ok} of ${drill.items.length} right (${Math.round(acc * 100)}%),
@@ -242,6 +241,7 @@ function finish() {
     const go = document.createElement("button");
     go.className = "primary";
     go.textContent = `Next: ${next.id} ${next.title}`;
+    go.title = `${MOD}↩`;
     go.onclick = () => openLesson(next.id);
     box.append(" ", go);
   }
@@ -326,7 +326,21 @@ function drawKeyboard() {
 }
 
 // ── Keys from the keyboard ─────────────────────────────────────────────────────────────────────
+/** The lesson after this one in the track, or null at the end. */
+function nextLesson() {
+  const own = LESSONS.filter(l => l.level.track === track.id);
+  return own[own.findIndex(l => l.id === lesson.id) + 1] || null;
+}
+const MOD = /Mac|iPhone|iPad/.test(navigator.platform) ? "⌘" : "Ctrl+";
+
 document.addEventListener("keydown", e => {
+  // ⌘↩ (Ctrl+Enter elsewhere): the next lesson
+  if ((e.metaKey || e.ctrlKey) && (e.code === "Enter" || e.code === "NumpadEnter") && !e.isComposing && !$("onboarding").open) {
+    e.preventDefault();
+    const next = nextLesson();
+    if (next) openLesson(next.id);
+    return;
+  }
   if ($("onboarding").open || e.metaKey || e.ctrlKey || e.altKey || e.isComposing) return;
   if (e.target instanceof HTMLInputElement || e.target instanceof HTMLButtonElement && (e.code === "Space" || e.code === "Enter")) {
     if (e.target instanceof HTMLButtonElement) e.target.blur(); else return;
