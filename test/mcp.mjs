@@ -53,6 +53,8 @@ assert.equal(fixed.progress.mistakes[q.questions[0].id], undefined);
 // Any keys that type the word count: 2-set uppercase is Shift; bada ⇧
 assert.equal((await call("type", { keys: "gksrnr", layout: 10 })).shown, "한국");
 assert.equal((await call("type", { keys: "F H ⇧K V H", layout: 13 })).shown, "않하");
+assert.equal((await call("type", { keys: "H F L K E K ⇧A", layout: 16 })).shown, "한국어");
+assert.equal((await call("type", { keys: "P F I D D", layout: 16 })).shown, "말이");
 assert.equal((await call("type", { keys: "hanguk" })).shown, "한국");
 
 // A bad answer is judged wrong, with a note, not an error

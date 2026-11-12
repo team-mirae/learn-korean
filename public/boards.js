@@ -71,3 +71,14 @@ export const BADA_KEYS = {
   KeyZ: ["ㅊ:c"], KeyX: ["ㅋ:c"], KeyC: ["ㄹ:c"], KeyV: ["ㅎ:c"], KeyB: ["ㅂ:c"], KeyN: ["ㅓ:v"], KeyM: ["ㅣ:v"],
   Comma: ["ㅡ:v"], Period: ["ㅗ:v"], Slash: ["ㅜ:v"], IntlRo: ["ㅢ:v"],
 };
+
+// bada plain's jamo per key, "jamo:role" (c initial or final, i initial only, v vowel); ⇧ gives the
+// jamo as a syllable (ㄱ → 가, ㅏ → 아). From bada-ime docs/layouts/16-bada-plain.json.
+export const PLAIN_KEYS = {
+  KeyQ: "ㅖ:v", KeyW: "ㅗ:v", KeyE: "ㅜ:v", KeyR: "ㅕ:v", KeyT: "ㅐ:v", KeyY: "ㅢ:v", KeyU: "ㅈ:c", KeyI: "ㄹ:c", KeyO: "ㅅ:c",
+  KeyP: "ㅁ:c", BracketLeft: "ㅌ:c", BracketRight: "ㅋ:c",
+  KeyA: "ㅓ:v", KeyS: "ㅡ:v", KeyD: "ㅣ:v", KeyF: "ㅏ:v", KeyG: "ㅑ:v", KeyH: "ㅎ:c", KeyJ: "ㅇ:c", KeyK: "ㄱ:c", KeyL: "ㄴ:c",
+  Semicolon: "ㄷ:c", Quote: "ㅊ:c", Backslash: "ㅍ:c",
+  KeyZ: "ㅒ:v", KeyX: "ㅛ:v", KeyC: "ㅠ:v", KeyV: "ㅘ:v", KeyB: "ㅔ:v", KeyN: "ㅂ:c", KeyM: "ㅆ:c", Comma: "ㄲ:c", Period: "ㄸ:i",
+  Slash: "ㅉ:i", IntlRo: "ㅃ:i",
+};

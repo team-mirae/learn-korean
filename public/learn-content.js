@@ -58,6 +58,37 @@ export function bada(text) {
   return out;
 }
 
+// ── bada plain (layout 16): which keys type a syllable ──────────────────────────────────────────
+// docs/layouts/16-bada-plain.md in bada-ime: vowels under the left hand, consonants under the right,
+// composed as 2-set. A vowel alone starts on ㅇ; where a bare vowel would take the final before it
+// or join the vowel before it, ⇧ + the vowel starts the syllable on ㅇ instead.
+
+const PLAIN_C = { ㄱ: "k", ㄲ: ",", ㄴ: "l", ㄷ: ";", ㄸ: ".", ㄹ: "i", ㅁ: "p", ㅂ: "n", ㅃ: "\\", ㅅ: "o", ㅆ: "m",
+  ㅇ: "j", ㅈ: "u", ㅉ: "/", ㅊ: ":", ㅋ: "[", ㅌ: "@", ㅍ: "]", ㅎ: "h" };
+const PLAIN_V = { ㅏ: "f", ㅐ: "t", ㅑ: "g", ㅒ: "z", ㅓ: "a", ㅔ: "b", ㅕ: "r", ㅖ: "q", ㅗ: "w", ㅘ: "v", ㅙ: "wt",
+  ㅚ: "wd", ㅛ: "x", ㅜ: "e", ㅝ: "ea", ㅞ: "eb", ㅟ: "ed", ㅠ: "c", ㅡ: "s", ㅢ: "y", ㅣ: "d" };
+const PLAIN_F = { ...PLAIN_C, ㄳ: "ko", ㄵ: "lu", ㄶ: "lh", ㄺ: "ik", ㄻ: "ip", ㄼ: "in", ㄽ: "io", ㄾ: "i@", ㄿ: "i]",
+  ㅀ: "ih", ㅄ: "no" };
+export const PLAIN = { consonants: PLAIN_C, vowels: PLAIN_V, finals: PLAIN_F };
+// The vowels a following vowel would join (ㅗ ㅏ → ㅘ): a syllable on ㅇ after them takes ⇧.
+const PLAIN_JOINS = { w: "ftd", e: "abd", s: "d" };
+
+/** The bada plain keys for Korean text: 한국어 → hflkek⇧a. */
+export function plain(text) {
+  let out = "", prev = null;
+  for (const ch of text) {
+    const n = ch.codePointAt(0) - 0xac00;
+    if (n < 0 || n > 11171) { out += PLAIN_V[ch] ?? PLAIN_C[ch] ?? ch; prev = null; continue; }
+    const [ini, vow, fin] = [INITIALS[Math.floor(n / 588)], PLAIN_V[VOWELS[Math.floor((n % 588) / 28)]], FINALS[n % 28]];
+    if (ini !== "ㅇ") out += PLAIN_C[ini] + vow;
+    else if (!prev || (!prev.fin && prev.vow.slice(-1) !== vow[0] && !(PLAIN_JOINS[prev.vow] || "").includes(vow[0]))) out += vow;
+    else out += "⇧" + vow;
+    out += PLAIN_F[fin] ?? "";
+    prev = { vow, fin };
+  }
+  return out;
+}
+
 // ── The anthem: 애국가, verse 1 and the refrain ─────────────────────────────────────────────────
 // Each word: Korean, the standard romanization, bada roman (level 1: every jamo spelled, ; where the
 // syllables split another way), bada roman with its shortcuts (level 2: the fewest keys that still
@@ -87,7 +118,7 @@ export const ANTHEM = {
 export function anthemItems(keys) {
   return ANTHEM.lines.flatMap((line, li) => line.words.map(word => ({
     ko: word.ko, rr: word.rr, line: li,
-    keys: keys === "twoset" ? twoSet(word.ko) : keys === "bada" ? bada(word.ko) : word[keys],
+    keys: keys === "twoset" ? twoSet(word.ko) : keys === "bada" ? bada(word.ko) : keys === "plain" ? plain(word.ko) : word[keys],
   })));
 }
 
@@ -96,6 +127,7 @@ export function anthemItems(keys) {
 const i = (ko, rr, keys) => ({ ko, rr, keys });
 const ts = (ko, rr) => ({ ko, rr, keys: twoSet(ko) });
 const bd = (ko, rr) => ({ ko, rr, keys: bada(ko) });
+const pl = (ko, rr) => ({ ko, rr, keys: plain(ko) });
 
 const HANGUL_NOTE = `<p>Korean is written in <b>Hangul</b>: 24 basic letters (jamo) stacked into
 syllable blocks. A block is a consonant (초성, the initial), a vowel (중성), and sometimes a final
@@ -342,6 +374,88 @@ export const LEVELS = [
   },
 
   {
+    id: "P1", n: 1, track: "bada-plain", title: "bada plain (JIS)", layout: 16, keysName: "bada plain keys",
+    intro: HANGUL_NOTE + `<p><b>bada plain</b> is bada ime's default layout for JIS keyboards:
+      <b>every vowel under the left hand, every consonant under the right</b>, one jamo to a key.
+      It was drawn so the wrists never move: the fingers reach up, down and sideways, and that's
+      all. It composes as 2-set does (a consonant after a vowel is a final until a vowel takes it),
+      and it's <b>deterministic</b>: the same keys always give the same text.</p>
+      <p>Above each word is the standard romanization and the keys to press, by their JIS legends;
+      ⇧ means Shift with that key.</p>`,
+    lessons: [
+      {
+        id: "P1.1", title: "Home row",
+        body: `<p>Left hand, vowels: ㅓ <code>A</code>, ㅡ <code>S</code>, ㅣ <code>D</code>, ㅏ
+          <code>F</code>, ㅑ <code>G</code>. Right hand, consonants: ㅎ <code>H</code>, ㅇ
+          <code>J</code>, ㄱ <code>K</code>, ㄴ <code>L</code>, ㄷ <code>;</code>.</p>
+          <p><b>A vowel alone starts on ㅇ</b>: you don't type the silent ㅇ, so 아 is just
+          <code>F</code> and 아이 <code>F D</code>. The <code>J</code> key is for the ㅇ that ends a
+          syllable: 강 <code>K F J</code>.</p>
+          <p>A consonant after a vowel ends the syllable, until a vowel comes next and takes it as its
+          initial: <code>H F L</code> 한, <code>H F L F</code> 하나.</p>`,
+        items: [pl("아", "a"), pl("어", "eo"), pl("이", "i"), pl("가", "ga"), pl("나", "na"), pl("다", "da"), pl("하", "ha"),
+          pl("아이", "ai"), pl("안", "an"), pl("강", "gang"), pl("한", "han"), pl("하나", "hana"), pl("아기", "agi"), pl("어디", "eodi"),
+          pl("그", "geu"), pl("가능", "ganeung")],
+      },
+      {
+        id: "P1.2", title: "Top row",
+        body: `<p>Left hand, vowels: ㅖ <code>Q</code>, ㅗ <code>W</code>, ㅜ <code>E</code>, ㅕ
+          <code>R</code>, ㅐ <code>T</code>, ㅢ <code>Y</code>. Right hand, consonants: ㅈ
+          <code>U</code>, ㄹ <code>I</code>, ㅅ <code>O</code>, ㅁ <code>P</code>, ㅌ <code>@</code>,
+          ㅋ <code>[</code>.</p>`,
+        items: [pl("오", "o"), pl("우", "u"), pl("여", "yeo"), pl("애", "ae"), pl("예", "ye"), pl("의", "ui"), pl("자", "ja"),
+          pl("라", "ra"), pl("사", "sa"), pl("마", "ma"), pl("타", "ta"), pl("카", "ka"), pl("사람", "saram"), pl("나라", "nara"),
+          pl("머리", "meori"), pl("노래", "norae"), pl("모자", "moja"), pl("시간", "sigan"), pl("이름", "ireum"), pl("오늘", "oneul"),
+          pl("내일", "naeil")],
+      },
+      {
+        id: "P1.3", title: "Bottom row and the edges",
+        body: `<p>Left hand, vowels: ㅒ <code>Z</code>, ㅛ <code>X</code>, ㅠ <code>C</code>, ㅘ
+          <code>V</code>, ㅔ <code>B</code>. Right hand: ㅂ <code>N</code>, ㅆ <code>M</code>, and
+          the tense consonants ㄲ <code>,</code>, ㄸ <code>.</code>, ㅉ <code>/</code>, ㅃ
+          <code>\\</code>. On the right edge: ㅊ <code>:</code>, ㅍ <code>]</code>.</p>
+          <p>ㄲ and ㅆ end syllables too (있다 <code>D M ; F</code>); ㄸ ㅉ ㅃ only start them.</p>`,
+        items: [pl("바", "ba"), pl("차", "cha"), pl("파", "pa"), pl("요", "yo"), pl("유", "yu"), pl("와", "wa"), pl("에", "e"),
+          pl("얘기", "yaegi"), pl("까", "kka"), pl("따", "tta"), pl("짜", "jja"), pl("빠", "ppa"), pl("싸", "ssa"), pl("있다", "itda"),
+          pl("밖", "bak"), pl("바다", "bada"), pl("친구", "chingu"), pl("커피", "keopi"), pl("우유", "uyu"), pl("학교", "hakgyo"),
+          pl("과자", "gwaja")],
+      },
+      {
+        id: "P1.4", title: "Compound vowels, double finals",
+        body: `<p>Vowels join as you type them: ㅗ ㅏ → ㅘ, ㅗ ㅐ → ㅙ, ㅗ ㅣ → ㅚ, ㅜ ㅓ → ㅝ, ㅜ ㅔ →
+          ㅞ, ㅜ ㅣ → ㅟ, ㅡ ㅣ → ㅢ. ㅘ and ㅢ have keys of their own too (<code>V</code>,
+          <code>Y</code>).</p>
+          <p>Two consonants after a vowel share the bottom: ㄹ ㄱ → ㄺ (닭 <code>; F I K</code>), ㅂ ㅅ
+          → ㅄ (값), ㄴ ㅎ → ㄶ (많다).</p>`,
+        items: [pl("왜", "wae"), pl("외", "oe"), pl("워", "wo"), pl("웨", "we"), pl("위", "wi"), pl("뭐", "mwo"), pl("쥐", "jwi"),
+          pl("돼지", "dwaeji"), pl("닭", "dak"), pl("값", "gap"), pl("앉다", "anda"), pl("많다", "manta"), pl("없다", "eopda"),
+          pl("읽다", "ikda"), pl("넓다", "neolda")],
+      },
+      {
+        id: "P1.5", title: "Shift",
+        body: `<p>A bare vowel takes the consonant before it: <code>H F L K E K A</code> is 한구거.
+          <b>⇧ + a vowel</b> starts the syllable on ㅇ instead: <code>H F L K E K ⇧A</code> 한국어.
+          It also keeps a vowel from joining the one before: <code>W D</code> is 외, <code>W
+          ⇧D</code> 오이.</p>
+          <p>Or type the vowel <b>twice</b>: the second press puts the final back. <code>P F I
+          D</code> is 마리, and <code>P F I D D</code> 말이.</p>
+          <p><b>⇧ + a consonant</b> is the consonant with ㅏ: <code>⇧K</code> 가, and it stays open
+          for what comes next: <code>⇧K U W K</code> 가족.</p>`,
+        items: [pl("한국어", "Hangugeo"), pl("오이", "oi"), pl("구어", "gueo"), pl("것이", "geosi"), pl("음악", "eumak"),
+          i("말이", "mari", "pfidd"), i("안아", "ana", "flff"), i("가족", "gajok", "⇧kuwk"), i("나무", "namu", "⇧lpe"),
+          i("사랑", "sarang", "⇧o⇧ij"), pl("길이", "giri"), pl("놀아요", "norayo")],
+      },
+      {
+        id: "P1.6", title: "Words",
+        body: `<p>Whole words, then Space.</p>`,
+        items: [pl("한글", "Hangeul"), pl("안녕하세요", "annyeonghaseyo"), pl("감사합니다", "gamsahamnida"), pl("선생님", "seonsaengnim"),
+          pl("대한민국", "Daehanminguk"), pl("서울", "Seoul"), pl("컴퓨터", "keompyuteo"), pl("괜찮아요", "gwaenchanayo")],
+      },
+      { id: "P1.7", title: "The anthem in bada plain", anthem: "plain" },
+    ],
+  },
+
+  {
     id: "B1", n: 1, track: "bada", title: "bada (JIS)", layout: 13, keysName: "bada keys",
     intro: HANGUL_NOTE + `<p><b>bada</b> is bada ime's own layout for JIS keyboards. It types like
       2-set (consonants under the left hand, vowels under the right), keeps finals like 3-set
@@ -421,15 +535,19 @@ export const LESSONS = LEVELS.flatMap(level => level.lessons.map(lesson => ({ ..
 
 const BADA_CAVEAT = "Works best on a JIS (Japanese) keyboard. To type it outside these lessons you need bada ime, which is macOS only for now.";
 
-/** The tracks: the layout a learner aims for, and its levels. 2-set first: it's the one everywhere. */
+/** The tracks: the layout a learner aims for, and its levels. 2-set first: it's the one everywhere.
+ * Then bada ime's layouts: bada plain (its default), bada roman, bada. */
 export const TRACKS = [
   { id: "2set", name: "Korean 2-set (KTS)", layout: 10, boards: ["ansi", "iso", "jis"],
     blurb: "The standard Korean keyboard (두벌식): one key per jamo. What most Koreans type, and built into every computer and phone." },
+  { id: "bada-plain", name: "bada plain", layout: 16, boards: ["jis"],
+    blurb: "bada ime's default layout: vowels under the left hand, consonants under the right. Your wrists never move.",
+    caveat: BADA_CAVEAT },
   { id: "bada-roman", name: "bada roman", layout: 15, boards: ["ansi", "iso", "jis"],
     blurb: "Korean spelled in Latin letters: type 한 as han. The quickest start.",
     caveat: BADA_CAVEAT },
   { id: "bada", name: "bada", layout: 13, boards: ["jis"],
-    blurb: "bada ime's own layout: every jamo on a key, no guessing.",
+    blurb: "bada ime's first layout: every jamo on a key, the number row included.",
     caveat: BADA_CAVEAT },
 ].map(t => ({ ...t, levels: LEVELS.filter(l => l.track === t.id) }));
 

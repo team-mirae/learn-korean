@@ -8,7 +8,7 @@ import { gunzipSync } from "node:zlib";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert/strict";
 import { Engine, DATA_FILES } from "../public/engine.js";
-import { LESSONS, TRACKS, lessonItems, twoSet, bada, ANTHEM } from "../public/learn-content.js";
+import { LESSONS, TRACKS, lessonItems, twoSet, bada, plain, ANTHEM } from "../public/learn-content.js";
 import { tokens } from "../public/keys.js";
 
 const dir = fileURLToPath(new URL("../public/engine/", import.meta.url));
@@ -25,7 +25,12 @@ assert.equal(bada("한"), "vhk");
 assert.equal(bada("안녕"), "fhkeuj");
 assert.equal(bada("것이"), "dnrfm");
 assert.equal(bada("감사합니다"), "dhgrhvhbemah");
-assert.deepEqual(TRACKS.map(t => t.levels.length > 0), [true, true, true]);
+// bada plain's keys as its layout page writes them (docs/layouts/16-bada-plain.md in bada-ime)
+assert.equal(plain("감사합니다"), "kfpofhfnld;f");
+assert.equal(plain("한국어"), "hflkek⇧a");
+assert.equal(plain("닭"), ";fik");
+assert.deepEqual(TRACKS.map(t => t.id), ["2set", "bada-plain", "bada-roman", "bada"]);
+assert.deepEqual(TRACKS.map(t => t.levels.length > 0), [true, true, true, true]);
 
 let checked = 0;
 const failures = [];

@@ -6,7 +6,7 @@
 import { loadEngine } from "./load.js";
 import { LESSONS, TRACKS, ANTHEM, TWO_SET, lessonItems, trackOf, migrateId } from "./learn-content.js";
 import { tokens, showKeys, isDrillKey } from "./keys.js";
-import { BOARDS, BADA_KEYS, guessBoard } from "./boards.js";
+import { BOARDS, BADA_KEYS, PLAIN_KEYS, guessBoard } from "./boards.js";
 
 const $ = id => document.getElementById(id);
 const STORE = "bada-learn";
@@ -85,7 +85,7 @@ function openLesson(id) {
 function anthemBody() {
   const how = { roman: "every jamo spelled, with <code>;</code> where the blocks split another way",
     short: "with the shortcuts of this level, and without <code>;</code> where the word comes first anyway",
-    twoset: "in 2-set keys", bada: "in bada keys" }[lesson.anthem];
+    twoset: "in 2-set keys", bada: "in bada keys", plain: "in bada plain keys" }[lesson.anthem];
   const keys = lessonItems(lesson).map(i => i.keys.length).reduce((a, b) => a + b, 0);
   const roman = lesson.anthem === "short"
     ? ` That's ${keys} keys, against ${ANTHEM.lines.flatMap(l => l.words).reduce((n, w) => n + w.roman.length, 0)} in Level 1.` : "";
@@ -294,6 +294,13 @@ function drawKeyboard() {
         jamo(base, { x: x + U / 2, y: y + U - 11, "text-anchor": "middle" }, "");
         jamo(shift, { x: x + U - 8, y: y + 17, "text-anchor": "end" }, "small");
         jamo(inter, { x: x + U - 8, y: y + U - 9, "text-anchor": "end" }, "small");
+      } else if (layout === 16) {
+        const [j, r] = (PLAIN_KEYS[code] || "").split(":");
+        g.append(el("text", { x: x + 8, y: y + 17, class: "latin small" }, text.toUpperCase()));
+        if (j) {
+          g.append(el("text", { x: x + U / 2, y: y + U - 11, "text-anchor": "middle", class: "jamo", style: `fill:var(${ROLE[r]})` }, j));
+          g.append(el("text", { x: x + U - 8, y: y + 17, "text-anchor": "end", class: "jamo small", style: "fill:var(--a)" }, syllableOf(j, r)));
+        }
       } else if (layout === 10) {
         const ch = letter ? code.slice(3).toLowerCase() : null;
         g.append(el("text", { x: x + 8, y: y + 17, class: "latin small" }, text.toUpperCase()));
@@ -323,6 +330,13 @@ function drawKeyboard() {
     svg.append(g);
   }
   $("board").replaceChildren(svg);
+}
+
+/** What ⇧ gives on a bada plain key: a consonant with ㅏ, a vowel on ㅇ (ㄱ → 가, ㅓ → 어). */
+function syllableOf(jamo, role) {
+  const I = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ", V = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
+  const [i, v] = role === "v" ? [11, V.indexOf(jamo)] : [I.indexOf(jamo), 0];
+  return String.fromCodePoint(0xac00 + (i * 21 + v) * 28);
 }
 
 // ── Keys from the keyboard ─────────────────────────────────────────────────────────────────────

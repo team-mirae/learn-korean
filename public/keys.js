@@ -36,14 +36,19 @@ export function legend(code) {
   return LEGEND[code] ?? (code.startsWith("Key") ? code.slice(3) : code);
 }
 
-/** How a drill shows its keys: bada roman and 2-set as typed (dhk), bada as legends (D H ⇧K). */
+/** How a drill shows its keys: bada roman and 2-set as typed (dhk), bada and bada plain as legends (D H ⇧K). */
 export function showKeys(keys, layout) {
-  if (layout !== 13) return keys;
+  if (layout !== 13 && layout !== 16) return keys;
   return tokens(keys).map(t => (t.shift ? "⇧" : "") + t.label).join(" ");
 }
 
-/** The keys the drill takes from the keyboard for a layout: letters, ; and - ; for bada every key. */
+// bada plain's jamo keys beyond the letters and ; (its number row is punctuation).
+const PLAIN_EDGE = new Set(["Quote", "BracketLeft", "BracketRight", "Backslash", "Comma", "Period", "Slash", "IntlRo"]);
+
+/** The keys the drill takes from the keyboard for a layout: letters, ; and - ; for bada every key;
+ * for bada plain its jamo keys. */
 export function isDrillKey(code, layout) {
+  if (layout === 16) return /^Key[A-Z]$/.test(code) || code === "Semicolon" || PLAIN_EDGE.has(code);
   if (/^Key[A-Z]$/.test(code) || code === "Semicolon" || code === "Minus") return true;
   return layout === 13 && code in LEGEND;
 }

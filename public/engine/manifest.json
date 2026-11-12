@@ -1,38 +1,38 @@
 {
- "version": "0.1.6",
- "commit": "fc97949",
+ "version": "0.3.1",
+ "commit": "ed5cc16",
  "wasm": {
-  "path": "bada.29937af00205.wasm",
-  "size": 603094
+  "path": "bada.566580f65dd4.wasm",
+  "size": 4252851
  },
  "data": {
   "ko-words.tsv": {
-   "path": "data/ko-words.tsv.9c29d29eb9db.gz",
-   "size": 7142901
+   "path": "data/ko-words.tsv.4b39ead7b2d7.gz",
+   "size": 7189599
   },
   "en-words.txt": {
-   "path": "data/en-words.txt.2e16eeda78fe.gz",
-   "size": 717785
+   "path": "data/en-words.txt.fdf7781a0312.gz",
+   "size": 704679
   },
   "oecd.tsv": {
-   "path": "data/oecd.tsv.4e0a4a434a39.gz",
-   "size": 747
+   "path": "data/oecd.tsv.7f77a9683a24.gz",
+   "size": 779
   },
   "ja-words.txt": {
-   "path": "data/ja-words.txt.d67f003c1379.gz",
-   "size": 3106
+   "path": "data/ja-words.txt.4f3bb6aab333.gz",
+   "size": 3138
   },
   "ko-jamo-4gram.bin": {
-   "path": "data/ko-jamo-4gram.bin.d8c54bb03b00.gz",
-   "size": 782981
+   "path": "data/ko-jamo-4gram.bin.3758227b351d.gz",
+   "size": 884642
   },
   "symbols.tsv": {
-   "path": "data/symbols.tsv.db1aefaf1d5a.gz",
-   "size": 2176
+   "path": "data/symbols.tsv.038be23c6783.gz",
+   "size": 2189
   },
   "en-ko.tsv": {
-   "path": "data/en-ko.tsv.2bc749915bdc.gz",
-   "size": 740584
+   "path": "data/en-ko.tsv.8b9cf7922e09.gz",
+   "size": 741777
   }
  }
 }

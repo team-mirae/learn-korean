@@ -9,10 +9,11 @@ it gives. The learner first picks the Korean layout to aim for, and learns it fr
 | Track | Layout | Keyboards | Lessons |
 |---|---|---|---|
 | `2set` | Korean 2-set (10, KTS): the standard keyboard | US (ANSI), ISO, JIS | K1 home, top and bottom rows, Shift, compound jamo |
+| `bada-plain` | bada plain (16): bada ime's default, vowels left and consonants right | JIS | P1 home, top and bottom rows, compound vowels, Shift |
 | `bada-roman` | bada roman (15): Korean spelled in Latin letters | US (ANSI), ISO, JIS | R1 the letters, R2 the shortcuts |
-| `bada` | bada (13): bada ime's own JIS layout | JIS | B1 home row, vowels, consonants, finals, number row |
+| `bada` | bada (13): bada ime's first JIS layout | JIS | B1 home row, vowels, consonants, finals, number row |
 
-bada and bada roman work best on a JIS (Japanese) keyboard, and typing them outside the lessons
+bada plain, bada roman and bada work best on a JIS (Japanese) keyboard, and typing them outside the lessons
 needs bada ime, which is macOS only for now; the onboarding says so.
 
 Each lesson ends in a drill: a word, its standard romanization (Revised Romanization) and its keys
@@ -36,15 +37,15 @@ the server teaches, quizzes and judges answers on the same engine.
 | `type` | What any keys type in a layout |
 
 Keys are written one character per key by its JIS legend; ⇧ before a key is Shift (in bada roman and
-2-set an uppercase letter is too). Add it to Claude Code with
+2-set an uppercase letter is too; bada and bada plain letters are case-blind). Add it to Claude Code with
 `claude mcp add --transport http learn-korean https://learn.sjun.me/mcp`.
 
 ## Files
 
 - `public/`: the site, served as it is (no build step).
   - `index.html`, `learn.js`, `learn.css` (on top of `style.css`, bada ime's simulator styles).
-  - `learn-content.js`: tracks, levels, lessons, drills and the anthem; the 2-set and bada keys of a
-    word (`twoSet`, `bada`). Data only.
+  - `learn-content.js`: tracks, levels, lessons, drills and the anthem; the 2-set, bada plain and bada keys
+    of a word (`twoSet`, `plain`, `bada`). Data only.
   - `keys.js`: the key notation (legends to key codes, Shift). `boards.js`: the keyboards drawn.
   - `engine.js`, `load.js`: the engine's JSON interface and its loader.
   - `engine/`: the engine as WebAssembly and its data, gzipped and named by hash, with
